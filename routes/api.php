@@ -22,3 +22,6 @@ Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');
 
 Route::get('user', 'UserController@getAuthenticatedUser');
+
+Route::get('profile', 'ProfileController@index')->middleware('auth:api');
+Route::patch('profile/{id}', 'ProfileController@update'); // profile update
