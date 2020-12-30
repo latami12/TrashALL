@@ -29,7 +29,7 @@ class ProfileController extends Controller
         $user->phone = $request->phone;
 
         if (!empty($request->password)) {
-            $user->passwrod = Hash::make($request->password);
+            $user->password = Hash::make($request->password);
         }
 
         $user->update();

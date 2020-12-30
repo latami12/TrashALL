@@ -24,3 +24,5 @@ Auth::routes([
 ]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/admin', 'PengurusController@index');
+Route::post('/admin', 'PengurusController@create');

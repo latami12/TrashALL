@@ -18,10 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('register', 'UserController@register');
-Route::post('login', 'UserController@login');
+Route::post('register', 'UserController@register'); // Register untuk nasabah
+Route::post('login', 'UserController@login'); // login untuk nasabah, pengurus1, pengurus2
 
-Route::get('user', 'UserController@getAuthenticatedUser');
+Route::get('user', 'UserController@getAuthenticatedUser'); // ambil semua user
 
-Route::get('profile', 'ProfileController@index')->middleware('auth:api');
-Route::patch('profile/{id}', 'ProfileController@update'); // profile update
+Route::get('profile', 'ProfileController@index')->middleware('auth:api'); //ambil semua profile
+Route::patch('profile/{id}', 'ProfileController@update')->middleware('auth:api'); // profile update
