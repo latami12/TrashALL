@@ -25,3 +25,6 @@ Route::get('user', 'UserController@getAuthenticatedUser'); // ambil semua user
 
 Route::get('profile', 'ProfileController@index')->middleware('auth:api'); //ambil semua profile
 Route::patch('profile/{id}', 'ProfileController@update')->middleware('auth:api'); // profile update
+
+Route::post('penjemputan', 'API\PenjemputanController@requestPenjemputan')->middleware('auth:api');
+Route::delete('penjemputan/{id}', 'API\PenjemputanController@batalkanRequestPenjemputan')->middleware('auth:api');
