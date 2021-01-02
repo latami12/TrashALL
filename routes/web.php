@@ -24,7 +24,10 @@ Auth::routes([
 ]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/admin', 'PengurusController@index');
-Route::post('/admin', 'PengurusController@create');
+
+Route::get('/user', 'PengurusController@index');
+Route::post('/user', 'PengurusController@create');
+
+Route::resource('/admin', 'ProfileWebController');
 
 Route::get('bendahara', 'BendaharaController@index');

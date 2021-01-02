@@ -12,10 +12,10 @@ class ProfileWebController extends Controller
 {
     public function index()
     {
-        dd(Auth::user());
+        // dd(Auth::user());
         $user = User::all();
 
-        return view('profile.index', compact('user'));
+        return view('admin.index', compact('user'));
     }
 
     public function update(Request $request, $id)
@@ -26,7 +26,7 @@ class ProfileWebController extends Controller
 
         $user = User::where('id', $id)->first();
         $user->name = $request->name;
-        $user->alamat = $request->almat;
+        $user->alamat = $request->alamat;
         $user->phone = $request->phone;
 
         if (!empty($request->passwrod)) {
@@ -56,7 +56,7 @@ class ProfileWebController extends Controller
 
 
         $user->update();
-        return redirect(route('profile.index'))->with(['Success' => 'Profile telah diperbarui']);
+        return redirect(route('admin.index'))->with(['Success' => 'Profile telah diperbarui']);
     }
 
     public function destroy($id)
@@ -64,8 +64,8 @@ class ProfileWebController extends Controller
         $user = User::find($id);
         if (!empty($user)) {
             $user->delete();
-            return redirect(route('profile.index'))->with(['Success' => 'Profile telah terhapus']);
+            return redirect(route('admin.index'))->with(['Success' => 'Profile telah terhapus']);
         }
-        return redirect(route('profile.index'))->with(['Failed' => 'Profile gagal terhapus']);
+        return redirect(route('admin.index'))->with(['Failed' => 'Profile gagal terhapus']);
     }
 }

@@ -17,12 +17,12 @@ class UserSeeder extends Seeder
         $password = Hash::make('password');
 
         $admin = User::create([
-                'name' => 'Latami',
+                'name' => 'Rahmat Bagus Latami',
                 'email' => 'ppib14latami@gmail.com',
                 'email_verified_at' => now(),
                 'password' => $password,
                 'phone' => '082233413048',
-                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=User',
+                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=Admin',
                 'role_id' => 5
         ]);
 
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => $password,
                 'phone' => '081282951055',
-                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=User/',
+                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=Bendahara',
                 'role_id' => 4
         ]);
 
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => $password,
                 'phone' => '081345670922',
-                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=User/',
+                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=Pengurus1',
                 'role_id' => 2
         ]);
 
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => $password,
                 'phone' => '082245670891',
-                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=User/',
+                'foto' => 'https://via.placeholder.com/150/000000/FFFFFF/?text=Pengurus2',
                 'role_id' => 3
         ]);
 

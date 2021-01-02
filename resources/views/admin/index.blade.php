@@ -29,25 +29,19 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active  ">
-            <a class="nav-link" href="./dashboard.html">
-              <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./user.html">
-              <i class="material-icons">person</i>
+            <a class="nav-link" href="#">
+              <i class="material-icons">Users</i>
               <p>User Profile</p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./tables.html">
-              <i class="material-icons">content_paste</i>
-              <p>Table List</p>
+            <a class="nav-link" href="{{ route('admin.users')}}">
+              <i class="material-icons">group</i>
+              <p>User Create</p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
+            <a class="nav-link" href="#">
               <i class="material-icons">library_books</i>
               <p>Typography</p>
             </a>
@@ -140,7 +134,104 @@
         </div>
       </nav>
       <!-- End Navbar -->
-      
+      @yield('content')
+      <form action="{{ route('admin.index')}}">
+        <div class="container mt-5">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Foto</th>
+                  <th scope="col">No</th>
+                  <th scope="col">Role Id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Alamat</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php $no =1; ?>
+                @foreach ($user as $user)
+                <tr>
+                  <td><img src="{{ $user->foto}}"></td>
+                  <th scope="row">{{ $no++}}</th>
+                  <th scope="row">{{ $user->role_id}}</th>
+                  <td>{{ $user->name}}</td>
+                  <td>{{ $user->email}}</td>
+                  <td>{{ $user->alamat}}</td>
+                  <td>{{ $user->phone}}</td>
+                  <td>
+                      <form action="{{ route('admin.destroy', $user->id) }}" method="post" class="d-inline">
+                      @csrf
+                      @method('DELETE')
+                      {{-- <a href="{{ route('profile.update', $user->id) }} " class="btn btn-warning btn-sm"><i
+                              class="fa fa-pencil"> | Edit</i></a> --}}
+                      <!-- Button trigger modal -->
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash"> | Hapus</i></button>
+                      </form>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                            data-target="#exampleModal{{$user->id}}"> 
+                            <i class="fa fa-pencil"> | Edit</i>
+                        </button>
+
+
+                      <!-- Modal -->
+                        <div class="modal fade" id="exampleModal{{ $user->id}}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit Users</h5>
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('admin.update', $user->id) }}" target="#" method="post">
+                                            @csrf
+                                            @method('patch')
+                                            <div class="form-group">
+                                                <label for="inputAddress">Name</label>
+                                                <input type="text" class="form-control" id="inputAddress"
+                                                    placeholder="Email..." value="{{$user->name}}" name="name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputAddress">Email</label>
+                                                <input type="text" class="form-control" id="inputAddress"
+                                                    placeholder="Email..." value="{{$user->email}}" name="email">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputAddress">No. Phone</label>
+                                                <input type="text" class="form-control" id="inputAddress"
+                                                    placeholder="No. Phone..." value="{{$user->phone}}" name="phone">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputCity">City</label>
+                                                <input type="text" class="form-control" id="inputCity" placeholder="Address..." value="{{$user->alamat}}" name="alamat">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+
+                                </div>
+                            </div>
+                        </div>
+                      </td>
+                </tr>  
+                @endforeach
+                
+                
+              </tbody>
+            </table>
+        </div>
+    </form>
+
       <footer class="footer">
         <div class="container-fluid">
           <nav class="float-left">
@@ -185,7 +276,7 @@
       <a href="#" data-toggle="dropdown">
         <i class="fa fa-cog fa-2x"> </i>
       </a>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu pb-2">
         <li class="header-title"> Sidebar Filters</li>
         <li class="adjustments-line">
           <a href="javascript:void(0)" class="switch-trigger active-color">
@@ -198,51 +289,6 @@
             </div>
             <div class="clearfix"></div>
           </a>
-        </li>
-        <li class="header-title">Images</li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="{{asset('assets/img/sidebar-1.jpg')}}" alt="">
-          </a>
-        </li>
-        <li class="active">
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="{{asset('assets/img/sidebar-2.jpg')}}" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="{{asset('assets/img/sidebar-3.jpg')}}" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="{{asset('assets/img/sidebar-4.jpg')}}" alt="">
-          </a>
-        </li>
-        <li class="button-container">
-          <a href="https://www.creative-tim.com/product/material-dashboard-dark" target="_blank" class="btn btn-primary btn-block">Free Download</a>
-        </li>
-        <!-- <li class="header-title">Want more components?</li>
-            <li class="button-container">
-                <a href="https://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-warning btn-block">
-                  Get the pro version
-                </a>
-            </li> -->
-        <li class="button-container">
-          <a href="https://demos.creative-tim.com/material-dashboard-dark/docs/2.0/getting-started/introduction.html" target="_blank" class="btn btn-default btn-block">
-            View Documentation
-          </a>
-        </li>
-        <li class="button-container github-star">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard/tree/dark-edition" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-        </li>
-        <li class="header-title">Thank you for 95 shares!</li>
-        <li class="button-container text-center">
-          <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-          <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-          <br>
-          <br>
         </li>
       </ul>
     </div>

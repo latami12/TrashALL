@@ -14,7 +14,7 @@ class PengurusController extends Controller
     {
         $user = User::all();
 
-        return view('admin.index', compact('user'));
+        return view('admin.users', compact('user'));
     }
 
     public function create(Request $request)
@@ -41,6 +41,6 @@ class PengurusController extends Controller
         $user->save();
         $user = User::all();
 
-        return view('admin.index');
+        return view('admin.users');
     }
 }
