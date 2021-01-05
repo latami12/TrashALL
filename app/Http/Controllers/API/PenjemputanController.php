@@ -27,6 +27,8 @@ class PenjemputanController extends Controller
             'lokasi' => $lokasi
         ]);
 
+        $data = $old_pj;
+
         if (!empty($sampahs)) {
             foreach ($sampahs as $sampah) {
                 $harga = $tabel_sampah->firstWhere('id', "{$sampah['sampah_id']}");
@@ -48,9 +50,9 @@ class PenjemputanController extends Controller
                 'total_berat' => $d_pj->where('penjemputan_id', $old_pj->id)->sum('berat'),
                 'total_harga' => $d_pj->where('penjemputan_id', $old_pj->id)->sum('harga'),
             ]);
+            $data = $pj->where('id', $old_pj->id)->with('detail_penjemputan')->get();
         }
 
-        $data = $pj->where('id', $old_pj->id)->with('detail_penjemputan')->get();
         return $this->sendResponse('Success', 'Pickup request sent successfully', $data, 201);
     }
 

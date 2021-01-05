@@ -28,7 +28,7 @@ Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('jwt.ve
 
 
 Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(function(){
-    Route::post('penjemputan', 'API\PenjemputanController@requestPenjemputan');
-    Route::delete('penjemputan/{id}', 'API\PenjemputanController@batalkanRequestPenjemputan');
+    Route::post('penjemputan', 'PenjemputanController@requestPenjemputan');
+    Route::delete('penjemputan/{id}', 'PenjemputanController@batalkanRequestPenjemputan');
     
 });

@@ -20,8 +20,8 @@ class CreatePenjemputansTable extends Migration
             $table->foreignId('pengurus1_id')->constrained('users');
             $table->enum('status', ['Menunggu', 'Berhasil', 'Diterima', 'Ditolak']);
             $table->text('lokasi')->nullable();
-            $table->decimal('total_berat');
-            $table->decimal('total_harga');
+            $table->decimal('total_berat')->nullable();
+            $table->decimal('total_harga')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });
