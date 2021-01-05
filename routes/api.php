@@ -21,10 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', 'UserController@register'); // Register untuk nasabah
 Route::post('login', 'UserController@login'); // login untuk nasabah, pengurus1, pengurus2
 
-Route::get('user', 'UserController@getAuthenticatedUser'); // ambil semua user
+Route::get('user', 'UserController@getAuthenticatedUser')->middleware('auth:api'); // ambil semua user
 
-Route::get('profile', 'ProfileController@index')->middleware('auth:api'); //ambil semua profile
-Route::patch('profile/{id}', 'ProfileController@update')->middleware('auth:api'); // profile update
+Route::get('profile', 'API\ProfileController@index')->middleware('auth:api'); //ambil semua profile
+Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('auth:api'); // profile update
 
 
 Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(function(){

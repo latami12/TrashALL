@@ -5,6 +5,9 @@
 @endsection
 
 @section('content')
+@if (Auth::user()->role_id == 5)
+                        ppppppppppppppppppppppppppppppppppppppppppppppppppp
+                    @endif
 <!-- Scrollable modal -->
 <form action="{{ route('admin.index') }}">
   <div class="container mt-5">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -26,6 +27,11 @@ class HomeController extends Controller
     {
         $users = User::all();
 
-        return view('admin.users', compact('users'));
+        if (Auth::User()->role_id == 5) {
+            # code...
+            return view('admin.users', compact('users'));
+        } else {
+            return view('bendahara.index');
+        }
     }
 }
