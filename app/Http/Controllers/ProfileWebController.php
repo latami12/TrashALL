@@ -12,10 +12,9 @@ class ProfileWebController extends Controller
 {
     public function index()
     {
-        // dd(Auth::user());
-        $user = User::all();
+        $users = User::all();
 
-        return view('admin.index', compact('user'));
+        return view('admin.users', compact('users'));
     }
 
     public function update(Request $request, $id)
@@ -35,8 +34,8 @@ class ProfileWebController extends Controller
 
         if ($request->foto) {
             // $image = $request->image->getClientOriginalName() . '-' . time() . '.' . $request->image->extension();
-            // $request->image->move(public_path('img'), $image);
-
+            // $request->image->move(public_path('img'), $image);   
+            // dd($request->foto);
             $img = base64_encode(file_get_contents($request->foto));
             $client = new Client();
             $res = $client->request('POST', 'https://freeimage.host/api/1/upload', [
@@ -49,7 +48,7 @@ class ProfileWebController extends Controller
             ]);
             $array = json_decode($res->getBody()->getContents());
             // dd($array);
-            $foto = $array->foto->file->resource->chain->foto;
+            $foto = $array->image->url;
             $user->foto = $foto;
             // dd($filename);
         }

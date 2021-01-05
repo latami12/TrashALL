@@ -29,13 +29,13 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active  ">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('admin.index') }}">
               <i class="material-icons">Users</i>
               <p>User Profile</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="{{ route('admin.users')}}">
+          <li class="nav-item">
+            <a class="nav-link" href="">
               <i class="material-icons">group</i>
               <p>User Create</p>
             </a>
@@ -105,22 +105,6 @@
                   </p>
                 </a>
               </li>
-              {{-- <li class="nav-item dropdown">
-                <a class="nav-link" href="javscript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
-                  <p class="d-lg-none d-md-block">
-                    Some Actions
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="javascript:void(0)">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="javascript:void(0)">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="javascript:void(0)">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="javascript:void(0)">Another Notification</a>
-                  <a class="dropdown-item" href="javascript:void(0)">Another One</a>
-                </div>
-              </li> --}}
               <li class="nav-item">
                 <a class="nav-link" href="javascript:void(0)">
                   <i class="material-icons">person</i>
@@ -135,132 +119,26 @@
       </nav>
       <!-- End Navbar -->
       @yield('content')
-      <form action="{{ route('admin.index')}}">
-        <div class="container mt-5">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Foto</th>
-                  <th scope="col">No</th>
-                  <th scope="col">Role Id</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Alamat</th>
-                  <th scope="col">Phone</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php $no =1; ?>
-                @foreach ($user as $user)
-                <tr>
-                  <td><img src="{{ $user->foto}}"></td>
-                  <th scope="row">{{ $no++}}</th>
-                  <th scope="row">{{ $user->role_id}}</th>
-                  <td>{{ $user->name}}</td>
-                  <td>{{ $user->email}}</td>
-                  <td>{{ $user->alamat}}</td>
-                  <td>{{ $user->phone}}</td>
-                  <td>
-                      <form action="{{ route('admin.destroy', $user->id) }}" method="post" class="d-inline">
-                      @csrf
-                      @method('DELETE')
-                      {{-- <a href="{{ route('profile.update', $user->id) }} " class="btn btn-warning btn-sm"><i
-                              class="fa fa-pencil"> | Edit</i></a> --}}
-                      <!-- Button trigger modal -->
-                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash"> | Hapus</i></button>
-                      </form>
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                            data-target="#exampleModal{{$user->id}}"> 
-                            <i class="fa fa-pencil"> | Edit</i>
-                        </button>
-
-
-                      <!-- Modal -->
-                        <div class="modal fade" id="exampleModal{{ $user->id}}" tabindex="-1"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Edit Users</h5>
-                                        <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('admin.update', $user->id) }}" target="#" method="post">
-                                            @csrf
-                                            @method('patch')
-                                            <div class="form-group">
-                                                <label for="inputAddress">Name</label>
-                                                <input type="text" class="form-control" id="inputAddress"
-                                                    placeholder="Email..." value="{{$user->name}}" name="name">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputAddress">Email</label>
-                                                <input type="text" class="form-control" id="inputAddress"
-                                                    placeholder="Email..." value="{{$user->email}}" name="email">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputAddress">No. Phone</label>
-                                                <input type="text" class="form-control" id="inputAddress"
-                                                    placeholder="No. Phone..." value="{{$user->phone}}" name="phone">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputCity">City</label>
-                                                <input type="text" class="form-control" id="inputCity" placeholder="Address..." value="{{$user->alamat}}" name="alamat">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                        </form>
-
-                                </div>
-                            </div>
-                        </div>
-                      </td>
-                </tr>  
-                @endforeach
-                
-                
-              </tbody>
-            </table>
-        </div>
-    </form>
 
       <footer class="footer">
         <div class="container-fluid">
           <nav class="float-left">
             <ul>
               <li>
-                <a href="https://www.creative-tim.com">
+                <a href="https://github.com/latami12/TrashALL">
                   Creative Tim
                 </a>
               </li>
               <li>
-                <a href="https://creative-tim.com/presentation">
+                <a href="https://github.com/latami12">
                   About Us
-                </a>
-              </li>
-              <li>
-                <a href="http://blog.creative-tim.com">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="https://www.creative-tim.com/license">
-                  Licenses
                 </a>
               </li>
             </ul>
           </nav>
           <div class="copyright float-right" id="date">
             , made with <i class="material-icons">favorite</i> by
-            <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+            <a href="https://github.com/latami12" target="_blank">latami12</a> for a better web.
           </div>
         </div>
       </footer>

@@ -38,7 +38,8 @@ class PenjemputanController extends Controller
                     ],
                     [
                         'berat' => $sampah['berat'],
-                        'harga' => $harga_jual
+                        'harga_perkilogram' => $harga_jual,
+                        'harga' => $harga_jual * $sampah['berat']
                     ]
                 );
             }
