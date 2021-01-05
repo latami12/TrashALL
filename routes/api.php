@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', 'UserController@register'); // Register untuk nasabah
 Route::post('login', 'UserController@login'); // login untuk nasabah, pengurus1, pengurus2
 
-Route::get('user', 'UserController@getAuthenticatedUser')->middleware('auth:api'); // ambil semua user
+Route::get('user', 'UserController@getAuthenticatedUser')->middleware('jwt.verify'); // ambil semua user
 
 Route::get('profile', 'API\ProfileController@index')->middleware('auth:api'); //ambil semua profile
 Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('auth:api'); // profile update
