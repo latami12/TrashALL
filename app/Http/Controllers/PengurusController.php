@@ -12,9 +12,14 @@ class PengurusController extends Controller
 {
     public function index()
     {
+        return view('admin.create');
+    }
+
+    public function show()
+    {
         $users = User::all();
     
-        return view('admin.index', compact('users'));
+        return view('admin.create', compact('users'));
     }
 
     public function create(Request $request)
@@ -39,8 +44,8 @@ class PengurusController extends Controller
         // $token = JWTAuth::fromUser($user);
 
         $user->save();
-        $user = User::all();
+        // $user = User::all();
 
-        return view('admin.index');
+        return redirect(route('admin.index'));
     }
 }

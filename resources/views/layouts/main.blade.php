@@ -35,7 +35,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{ route('user')}}">
               <i class="material-icons">group</i>
               <p>User Create</p>
             </a>

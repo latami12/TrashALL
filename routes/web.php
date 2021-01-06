@@ -25,8 +25,9 @@ Auth::routes([
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/users', 'PengurusController@index');
-Route::post('/users', 'PengurusController@create');
+Route::get('/user', 'PengurusController@index')->name('user');
+Route::get('/get/users', 'PengurusController@index');
+Route::post('/create/users', 'PengurusController@create');
 
 Route::resource('/admin', 'ProfileWebController');
 

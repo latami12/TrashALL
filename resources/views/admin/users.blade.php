@@ -5,18 +5,12 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->role_id == 5)
-                        ppppppppppppppppppppppppppppppppppppppppppppppppppp
-                    @endif
+{{-- @if (Auth::user()->role_id == 5)
+                        ppppppp
+                    @endif --}}
 <!-- Scrollable modal -->
 <form action="{{ route('admin.index') }}">
   <div class="container mt-5">
-    <div>
-      <li class="nav-item ">
-        <a href=""></a>
-        <button class="btn btn-danger btn-sm"><i class="fa fa-pencil"> | Create Users</i></button>
-      </li>
-    </div>
       <table class="table table-hover">
         <thead>
           <tr>
