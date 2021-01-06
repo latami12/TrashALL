@@ -31,3 +31,11 @@ Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(func
     Route::post('penjemputan', 'PenjemputanController@requestPenjemputan');
     Route::delete('penjemputan/{id}', 'PenjemputanController@batalkanRequestPenjemputan');  
 });
+
+Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function(){
+    Route::get('/show-request', 'PenyetoranController@showNasabahRequest');
+    Route::get('/accept-request', 'PenyetoranController@acceptNasabahRequest');
+    Route::post('/store', 'PenyetoranController@penyetoranNasabah');
+    Route::get('/show-deposit', 'PenyetoranController@showPenyetoranNasabah');
+    Route::get('/confirm-deposit/{penyetoran-id}', 'PenyetoranController@confirmDepositAsTransaksi');
+});
