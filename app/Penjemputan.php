@@ -17,15 +17,6 @@ class Penjemputan extends Model
         'image',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($penjemputan) {
-            $penjemputan->detail_penjemputan()->delete();
-        });
-    }
-
     public function nasabah()
     {
         return $this->hasOne('App\User');

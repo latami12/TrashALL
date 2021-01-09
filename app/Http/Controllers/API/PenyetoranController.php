@@ -21,9 +21,9 @@ class PenyetoranController extends Controller
 {
     public function showNasabahRequest(Penjemputan $pj)
     {
+        // dd(Auth::id());
         $data = $pj->where('pengurus1_id', Auth::id())
-                   ->where('status', 'menunggu')
-                   ->with('detail_penyetoran')
+                   ->where('status', 'Menunggu')
                    ->get();
 
         try {
