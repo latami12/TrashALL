@@ -24,6 +24,7 @@ class PenyetoranController extends Controller
         // dd(Auth::id());
         $data = $pj->where('pengurus1_id', Auth::id())
                    ->where('status', 'Menunggu')
+                   ->with('detail_penjemputan')
                    ->get();
 
         try {
