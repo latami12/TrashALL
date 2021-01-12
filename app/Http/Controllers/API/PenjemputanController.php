@@ -2,29 +2,60 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Penjemputan;
-use App\DetailPenjemputan;
 use App\Sampah;
 use Carbon\Carbon;
+use App\Penjemputan;
+use GuzzleHttp\Client;
+use App\DetailPenjemputan;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class PenjemputanController extends Controller
 {
-    public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Carbon $carbon, Sampah $tabel_sampah)
+    public function showRequestPenjemputan(Penjemputan $pj)
+    {
+        $data = $pj->where('nasabah_id', Auth::id())->with('detail_penjemputan')->get();
+
+        
+
+        try {
+            return $this->sendResponse('Success', 'Pickup data has been successfully to get', $data, 200);
+        } catch (\Throwable $th) {
+            return $this->sendResponse('Failed', 'Pickup data failed to get', NULL, 500);
+        }
+    }
+
+    public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Carbon $carbon, Sampah $tabel_sampah, Client $client)
     {
         $tanggal = $carbon->now()->toDateString();
-        $pengurus1_id = $request->pengurus1_id;
+        // $pengurus1_id = $request->pengurus1_id;
         $lokasi = $request->lokasi;
         $sampahs = $request->sampah;
+
+        $image = base64_encode(file_get_contents($request->image));
+
+        $res = $client->request('POST', 'https://freeimage.host/api/1/upload', [
+            'form_params' => [
+                'key' => '6d207e02198a847aa98d0a2a901485a5',
+                'action' => 'upload',
+                'source' => $image,
+                'format' => 'json'
+            ]
+        ]);
+
+        $image = json_decode($res->getBody()->getContents());
+
+        $image = $image->image->display_url;
+
 
         $old_pj = $pj->firstOrCreate([
             'tanggal' => $tanggal,
             'nasabah_id' => Auth::id(),
-            'pengurus1_id' => $pengurus1_id,
+            // 'pengurus1_id' => $pengurus1_id,
             'status' => 'Menunggu',
-            'lokasi' => $lokasi
+            'lokasi' => $lokasi,
+            'image' => $image
         ]);
 
         $data = $old_pj;

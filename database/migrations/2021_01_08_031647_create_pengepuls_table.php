@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePengurusesTable extends Migration
+class CreatePengepulsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreatePengurusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('penguruses', function (Blueprint $table) {
+        Schema::create('pengepuls', function (Blueprint $table) {
             $table->id();
+            $table->string('pengepul');
+            $table->text('lokasi');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreatePengurusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penguruses');
+        Schema::dropIfExists('pengepuls');
     }
 }

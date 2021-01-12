@@ -28,8 +28,9 @@ Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('jwt.ve
 
 
 Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(function(){
-    Route::post('penjemputan', 'PenjemputanController@requestPenjemputan');
-    Route::delete('penjemputan/{id}', 'PenjemputanController@batalkanRequestPenjemputan');  
+    Route::get('show-request-penjemputan', 'PenjemputanController@showRequestPenjemputan');
+    Route::post('request-penjemputan', 'PenjemputanController@requestPenjemputan');
+    Route::delete('cancel-penjemputan/{id}', 'PenjemputanController@batalkanRequestPenjemputan');  
 });
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function(){
@@ -38,4 +39,9 @@ Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->grou
     Route::post('/store', 'PenyetoranController@penyetoranNasabah');
     Route::get('/show-deposit', 'PenyetoranController@showPenyetoranNasabah');
     Route::get('/confirm-deposit/{penyetoran-id}', 'PenyetoranController@confirmDepositAsTransaksi');
+});
+
+Route::prefix('pengurus-dua')->namespace('API')->middleware('jwt.verify')->group(function(){
+    Route::get('/show-pengepul', 'PenjualanController@showPengepul');
+    Route::post('/sell', 'PenjualanController@sellToPengepul');
 });
