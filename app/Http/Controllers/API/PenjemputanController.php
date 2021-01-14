@@ -87,7 +87,7 @@ class PenjemputanController extends Controller
         return $this->sendResponse('Success', 'Pickup request sent successfully', $data, 201);
     }
 
-    public function batalkanBarangRequsetPenjemputan($id, Penjemputan $pj, DetailPenjemputan $d_pj)
+    public function batalkanBarangRequestPenjemputan($id, Penjemputan $pj, DetailPenjemputan $d_pj)
     {
         $d_pj = $d_pj->firstWhere('id', $id);
 

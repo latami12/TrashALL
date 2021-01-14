@@ -28,10 +28,10 @@ Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('jwt.ve
 
 
 Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(function(){
-    Route::get('show-request-penjemputan', 'PenjemputanController@showRequestPenjemputan');
-    Route::post('request-penjemputan', 'PenjemputanController@requestPenjemputan');
-    Route::delete('cancel-penjemputan/{penjemputan_id}', 'PenjemputanController@batalkanRequestPenjemputan'); 
-    Route::delete('cancel-item/{detail_penjemputan_id}', 'PenjemputanController@batalkanBarangRequestPenjemputan'); 
+    Route::post('/request-penjemputan', 'PenjemputanController@requestPenjemputan');
+    Route::get('/show-request-penjemputan', 'PenjemputanController@showRequestPenjemputan');
+    Route::delete('/cancel-penjemputan/{penjemputan_id}', 'PenjemputanController@batalkanRequestPenjemputan'); 
+    Route::delete('/cancel-item/{detail_penjemputan_id}', 'PenjemputanController@batalkanBarangRequestPenjemputan'); 
 });
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function(){
