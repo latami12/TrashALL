@@ -4,15 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Bank;
 use App\Gudang;
-use App\Http\Controllers\Controller;
+use App\Sampah;
 use App\Pengepul;
 use App\Penjualan;
-use App\Sampah;
-use App\TransaksiBank;
 use Carbon\Carbon;
+use App\TransaksiBank;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class PenjualanController extends Controller
 {

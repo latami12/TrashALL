@@ -4,11 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Chat;
 use App\User;
-use App\Http\Controllers\Controller;
+use Pusher\Pusher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use Pusher\Pusher;
 
 class ChatController extends Controller
 {

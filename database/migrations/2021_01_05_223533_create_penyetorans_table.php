@@ -19,6 +19,7 @@ class CreatePenyetoransTable extends Migration
             $table->foreignId('nasabah_id')->constrained('users');
             $table->foreignId('pengurus1_id')->constrained('users');
             $table->enum('keterangan_penyetoran', ['diantar', 'dijemput']);
+            $table->unsignedBigInteger('penjemputan_id')->nullable();
             $table->text('lokasi')->nullable();
             $table->decimal('total_berat', 8, 2)->nullable();
             $table->decimal('total_debit', 10, 2)->nullable();

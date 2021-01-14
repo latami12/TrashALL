@@ -10,6 +10,7 @@ use App\DetailPenjemputan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PenjemputanController extends Controller
 {
@@ -28,7 +29,6 @@ class PenjemputanController extends Controller
 
     public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Carbon $carbon, Sampah $tabel_sampah, Client $client)
     {
-        $tanggal = $carbon->now()->toDateString();
         // $pengurus1_id = $request->pengurus1_id;
         $lokasi = $request->lokasi;
         $sampahs = $request->sampah;
@@ -50,7 +50,7 @@ class PenjemputanController extends Controller
 
 
         $old_pj = $pj->firstOrCreate([
-            'tanggal' => $tanggal,
+            'tanggal' => Carbon::now()->toDateString(),
             'nasabah_id' => Auth::id(),
             // 'pengurus1_id' => $pengurus1_id,
             'status' => 'Menunggu',
@@ -85,6 +85,29 @@ class PenjemputanController extends Controller
         }
 
         return $this->sendResponse('Success', 'Pickup request sent successfully', $data, 201);
+    }
+
+    public function batalkanBarangRequsetPenjemputan($id, Penjemputan $pj, DetailPenjemputan $d_pj)
+    {
+        $d_pj = $d_pj->firstWhere('id', $id);
+
+        if (empty($d_pj) || $pj->firstWhere('id', $d_pj->penjemputan_id)->status != 'menunggu') {
+            return $this->sendResponse('Failed', 'Pickup data not found or cannot be deleted', NULL, 400);
+        }
+
+        $pj_id = $d_pj->penjemputan_id;
+        $d_pj->delete();
+
+        $pj->where('id', $pj_id)->update([
+            'total_berat' => $d_pj->where('penjemputan_id', $pj_id)->sum('berat'),
+            'total_harga' => $d_pj->where('penjemputan_id', $pj_id)->sum('harga'),
+        ]);
+
+        try {
+            return $this->sendResponse('Success', 'Pickup data has been successfully deleted', (bool)$d_pj, 200);
+        } catch (\Throwable $th) {
+            return $this->sendResponse('Failed', 'Pickup data failed to deleted', NULL, 400);
+        }
     }
 
     public function batalkanRequestPenjemputan($id)

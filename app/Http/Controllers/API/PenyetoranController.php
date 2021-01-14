@@ -14,6 +14,7 @@ use App\DetailPenyetoran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use League\CommonMark\Inline\Parser\BangParser;
 
@@ -37,18 +38,33 @@ class PenyetoranController extends Controller
     public function acceptNasabahRequest($pj_id, Penjemputan $pj)
     {
         $pj = $pj->where('id', $pj_id)
-                 ->where('pengurus1_id', Auth::id())
                  ->where('status', 'menunggu')
-                 ->first();
+                 ->firstOrFail();
 
         if (!empty($pj)) {
-            $pj->update(['status', 'diterima']);
-        }         
+            $pj->update([
+                'status'        => 'diterima',
+                'pengurus1_id'  => Auth::id()
+            ]);
+        } else {
+            return $this->sendResponse('failed', 'Request data failed to get or has been accepted', null, 400);
+        }        
 
         try {
             return $this->sendResponse('Success', 'Request has been successfully to get', $pj, 200);
         } catch (\Throwable $th) {
             return $this->sendResponse('failed', 'Request failed to get', NULL, 500);
+        }
+    }
+
+    public function showAllNasabah(User $user)
+    {
+        $users = $user->whoHasRole('nasabah');
+
+        try {
+            return $this->sendResponse('Success', 'Users data has been successfully get', $users, 200);
+        } catch (\Throwable $th) {
+            return $this->sendResponse('Failed', 'User data failed to get', NULL, 500);
         }
     }
 
@@ -59,7 +75,8 @@ class PenyetoranController extends Controller
                 'tanggal'               => Carbon::now()->toDateString(),
                 'nasabah_id'            => $request->nasabah_id,
                 'pengurus1_id'          => Auth::id(),
-                'keterangan_penyetoran' => $request->keterangan_penyetoran == 'dijemput' ? $request->keterangan_penyetoran : NULL,
+                'keterangan_penyetoran' => $request->keterangan_penyetoran, 
+                'penjemputan_id'        => $request->keterangan_penyetoran == 'dijemput' ? $request->keterangan_penyetoran : NULL, 
                 'lokasi'                => $request->lokasi,
                 'status'                => "dalam proses",
             ]);
