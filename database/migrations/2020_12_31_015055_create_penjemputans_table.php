@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreatePenjemputansTable extends Migration
 {
@@ -17,11 +17,11 @@ class CreatePenjemputansTable extends Migration
             $table->id();
             $table->date('tanggal');
             $table->foreignId('nasabah_id')->constrained('users');
-            // $table->foreignId('pengurus1_id')->constrained('users');
+            $table->unsignedBigInteger('pengurus1_id')->nullable();
             $table->enum('status', ['Menunggu', 'Berhasil', 'Diterima', 'Ditolak']);
             $table->text('lokasi')->nullable();
-            $table->decimal('total_berat')->nullable();
-            $table->decimal('total_harga')->nullable();
+            $table->decimal('total_berat', 8, 2)->nullable();
+            $table->decimal('total_harga', 10, 2)->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

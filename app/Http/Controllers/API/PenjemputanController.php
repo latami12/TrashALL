@@ -18,8 +18,6 @@ class PenjemputanController extends Controller
     {
         $data = $pj->where('nasabah_id', Auth::id())->with('detail_penjemputan')->get();
 
-        
-
         try {
             return $this->sendResponse('Success', 'Pickup data has been successfully to get', $data, 200);
         } catch (\Throwable $th) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Bank;
+use App\User;
 use App\Gudang;
 use App\Sampah;
 use App\Transaksi;
@@ -14,7 +15,6 @@ use App\DetailPenyetoran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 use League\CommonMark\Inline\Parser\BangParser;
 
