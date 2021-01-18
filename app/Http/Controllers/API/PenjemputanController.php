@@ -16,16 +16,16 @@ class PenjemputanController extends Controller
 {
     public function showRequestPenjemputan(Penjemputan $pj)
     {
-        $data = $pj->where('nasabah_id', Auth::id())->with('detail_penjemputan')->get();
+        $data = $pj->latest()
+            ->where('nasabah_id', Auth::id())
+            ->with(['nasabah:id,name,email,phone', 'pengurus_satu:id,name,email,phone,alamat,foto', 'detail_penjemputan'])
+            ->get()
+            ->groupBy('status');
 
-        try {
-            return $this->sendResponse('Success', 'Pickup data has been successfully to get', $data, 200);
-        } catch (\Throwable $th) {
-            return $this->sendResponse('Failed', 'Pickup data failed to get', NULL, 500);
-        }
+        return $this->sendResponse('succes', 'Pickup data has been succesfully get', $data, 200);
     }
 
-    public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Carbon $carbon, Sampah $tabel_sampah, Client $client)
+    public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Sampah $tabel_sampah, Client $client)
     {
         // $pengurus1_id = $request->pengurus1_id;
         $lokasi = $request->lokasi;
@@ -46,31 +46,30 @@ class PenjemputanController extends Controller
 
         $image = $image->image->display_url;
 
-
         $old_pj = $pj->firstOrCreate([
-            'tanggal' => Carbon::now()->toDateString(),
-            'nasabah_id' => Auth::id(),
-            // 'pengurus1_id' => $pengurus1_id,
-            'status' => 'Menunggu',
-            'lokasi' => $lokasi,
-            'image' => $image
+            'tanggal'       => Carbon::now()->toDateTimeString(),
+            'nasabah_id'    => Auth::id(),
+            // 'pengurus1_id'  => $pengurus1_id,
+            'status'        => 'menunggu',
+            'lokasi'        => $lokasi,
+            'image'         => $image
         ]);
 
         $data = $old_pj;
 
         if (!empty($sampahs)) {
             foreach ($sampahs as $sampah) {
-                $harga = $tabel_sampah->firstWhere('id', "{$sampah['sampah_id']}");
-                $harga_jual = $harga->harga_perkilogram + ($harga->harga_perkilogram * 0.2);
+                $harga = $tabel_sampah->firstWhere('id', "{$sampah['sampah_id']}")->harga_perkilogram;
+                $harga_j = $harga + ($harga * 0.2);
                 $d_pj->updateOrCreate(
                     [
-                        'penjemputan_id' => $old_pj->id,
-                        'sampah_id' => $sampah['sampah_id']
+                        'penjemputan_id'    => $old_pj->id,
+                        'sampah_id'         => $sampah['sampah_id'],
                     ],
                     [
-                        'berat' => $sampah['berat'],
-                        'harga_perkilogram' => $harga_jual,
-                        'harga' => $harga_jual * $sampah['berat']
+                        'berat'             => $sampah['berat'],
+                        'harga_perkilogram' => $harga_j,
+                        'harga'             => $harga_j * $sampah['berat'],
                     ]
                 );
             }
@@ -82,15 +81,16 @@ class PenjemputanController extends Controller
             $data = $pj->where('id', $old_pj->id)->with('detail_penjemputan')->get();
         }
 
-        return $this->sendResponse('Success', 'Pickup request sent successfully', $data, 201);
+        return $this->sendResponse('succes', 'Pickup request sent successfully', $data, 201);
     }
 
     public function batalkanBarangRequestPenjemputan($id, Penjemputan $pj, DetailPenjemputan $d_pj)
     {
+
         $d_pj = $d_pj->firstWhere('id', $id);
 
         if (empty($d_pj) || $pj->firstWhere('id', $d_pj->penjemputan_id)->status != 'menunggu') {
-            return $this->sendResponse('Failed', 'Pickup data not found or cannot be deleted', NULL, 400);
+            return $this->sendResponse('failed', 'Pickup data not found or cannot be deleted', null, 400);
         }
 
         $pj_id = $d_pj->penjemputan_id;
@@ -102,20 +102,26 @@ class PenjemputanController extends Controller
         ]);
 
         try {
-            return $this->sendResponse('Success', 'Pickup data has been successfully deleted', (bool)$d_pj, 200);
-        } catch (\Throwable $th) {
-            return $this->sendResponse('Failed', 'Pickup data failed to deleted', NULL, 400);
+            return $this->sendResponse('succes', 'Pickup data has been succesfully deleted', (bool) $d_pj, 200);
+        } catch (\Throwable $e) {
+            return $this->sendResponse('failed', 'Pickup data failed to delete', null, 500);
         }
     }
 
     public function batalkanRequestPenjemputan($id)
     {
-        $pj = Penjemputan::destroy($id);
+        $pj = Penjemputan::where('id', $id)->where('status', 'menunggu')->first();
+        if (!empty($pj)) {
+            $d_pj = DetailPenjemputan::where('penjemputan_id', $pj->id)->get();
+            if (!empty($d_pj)) {
+                $pj->detail_penjemputan()->delete();
+            }
 
-        try {
-            return $this->sendResponse('Success', 'Pickup data has been successfully deleted', $pj, 201);
-        } catch (\Throwable $th) {
-            return $this->sendResponse('Failed', 'Pickup data failed to delete', NULL, 500);
+            $pj->where('id', $id)->delete();
+
+            return $this->sendResponse('succes', 'Pickup data has been succesfully deleted', true, 200);
+        } else {
+            return $this->sendResponse('failed', 'Pickup data cannot be deleted', false, 404);
         }
     }
 }
