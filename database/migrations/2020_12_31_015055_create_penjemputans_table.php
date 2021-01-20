@@ -24,6 +24,8 @@ class CreatePenjemputansTable extends Migration
             $table->decimal('total_harga', 10, 2)->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
+
+            $table->foreign('pengurus1_id')->references('id')->on('users');
         });
     }
 

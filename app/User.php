@@ -42,4 +42,26 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo('App\Roles', 'role_id');
     }
+
+    public function hasAnyRoles($roles) {
+        return $this->roles()->whereIn('name', $roles)->first() ? TRUE : FALSE;
+    }
+
+    public function hasRole($role) {
+        return $this->roles()->where('name', $role)->first() ? TRUE : FALSE;
+    }
+
+    public function whoHasRole($role) {
+        return self::whereHas('roles', function($q) use ($role) { // whereHas didn't return null data
+            $q->where('name', $role);
+        });
+    }
+
+    public function penjemputan() {
+        return $this->hasMany('App\Penjemputan', 'nasabah_id', 'id');
+    }
+
+    public function messages() {
+        return $this->hasMany('App\Message', 'from_id', 'id');
+    }
 }
