@@ -23,6 +23,9 @@ Route::post('login', 'UserController@login'); // login untuk nasabah, pengurus1,
 
 Route::get('user', 'UserController@getAuthenticatedUser')->middleware('jwt.verify'); // ambil semua user
 
+Route::get('/sampah', 'API\SampahController@getSampah')->middleware('jwt.verify'); // ambil sampah
+Route::get('/sampah-all', 'API\SampahController@allKategoriSampah')->middleware('jwt.verify'); // ambil sampah
+
 Route::get('profile', 'API\ProfileController@index')->middleware('jwt.verify'); //ambil semua profile
 Route::patch('profile/{id}', 'API\ProfileController@update')->middleware('jwt.verify'); // profile update
 
