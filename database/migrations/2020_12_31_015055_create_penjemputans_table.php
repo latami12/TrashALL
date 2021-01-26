@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,12 +14,14 @@ class CreatePenjemputansTable extends Migration
      */
     public function up()
     {
-        Schema::create('penjemputans', function (Blueprint $table) {
+        $tanggal = Carbon::now()->toDateTimeString();
+
+        Schema::create('penjemputans', function (Blueprint $table) use ($tanggal) {
             $table->id();
-            $table->date('tanggal');
+            $table->date('tanggal')->default($tanggal);
             $table->foreignId('nasabah_id')->constrained('users');
             $table->unsignedBigInteger('pengurus1_id')->nullable();
-            $table->enum('status', ['Menunggu', 'Berhasil', 'Diterima', 'Ditolak']);
+            $table->enum('status', ['Menunggu', 'Berhasil', 'Diterima', 'Ditolak', 'Gagal']);
             $table->text('lokasi')->nullable();
             $table->decimal('total_berat', 8, 2)->nullable();
             $table->decimal('total_harga', 10, 2)->nullable();

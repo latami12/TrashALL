@@ -31,4 +31,9 @@ class Penjemputan extends Model
     {
         return $this->hasMany('App\DetailPenjemputan');
     }
+
+    public function penyetoran()
+    {
+        return $this->hasOne('App\Penyetoran', 'id', 'penjemputan_id');
+    }
 }
