@@ -26,7 +26,11 @@ class PenjemputanController extends Controller
 
     public function requestPenjemputan(Request $request, Penjemputan $pj, DetailPenjemputan $d_pj, Sampah $tabel_sampah, Client $client)
     {
-        // $pengurus1_id = $request->pengurus1_id;
+        $request->validate([
+            'lokasi' => 'required',
+            'image'  => 'required|image'
+        ]);
+
         $lokasi = $request->lokasi;
         $sampahs = $request->sampah;
 
@@ -46,9 +50,8 @@ class PenjemputanController extends Controller
         $image = $image->image->display_url;
 
         $old_pj = $pj->firstOrCreate([
-            'tanggal'       => Carbon::now()->toDateTimeString(),
+            'tanggal'       => Carbon::now()->toDateString(),
             'nasabah_id'    => Auth::id(),
-            // 'pengurus1_id'  => $pengurus1_id,
             'status'        => 'menunggu',
             'lokasi'        => $lokasi,
             'image'         => $image
@@ -56,30 +59,28 @@ class PenjemputanController extends Controller
 
         $data = $old_pj;
 
-        if (!empty($sampahs)) {
-            foreach ($sampahs as $sampah) {
+        if(!empty($sampahs)) {
+            foreach($sampahs as $sampah) {
                 $harga = $tabel_sampah->firstWhere('id', "{$sampah['sampah_id']}")->harga_perkilogram;
                 $harga_j = $harga + ($harga * 0.2);
-                $d_pj->updateOrCreate(
-                    [
-                        'penjemputan_id'    => $old_pj->id,
-                        'sampah_id'         => $sampah['sampah_id'],
-                    ],
-                    [
-                        'berat'             => $sampah['berat'],
-                        'harga_perkilogram' => $harga_j,
-                        'harga'             => $harga_j * $sampah['berat'],
-                    ]
-                );
+                $d_pj->updateOrCreate([
+                                        'penjemputan_id'    => $old_pj->id,
+                                        'sampah_id'         => $sampah['sampah_id'],
+                                      ],
+                                      [
+                                        'berat'             => $sampah['berat'],
+                                        'harga_perkilogram' => $harga_j,
+                                        'harga'             => $harga_j * $sampah['berat'],
+                                      ]);
             }
-
+            
             $old_pj->update([
                 'total_berat' => $d_pj->where('penjemputan_id', $old_pj->id)->sum('berat'),
                 'total_harga' => $d_pj->where('penjemputan_id', $old_pj->id)->sum('harga'),
             ]);
             $data = $pj->where('id', $old_pj->id)->with('detail_penjemputan')->get();
         }
-
+        
         return $this->sendResponse('succes', 'Pickup request sent successfully', $data, 201);
     }
 
