@@ -110,7 +110,7 @@ class PenjemputanController extends Controller
 
     public function batalkanRequestPenjemputan($id)
     {
-        $pj = Penjemputan::where('id', $id)->where('status', 'menunggu')->first();
+        $pj = Penjemputan::where('id', $id)->where('status', 'Menunggu')->first();
         if (!empty($pj)) {
             $d_pj = DetailPenjemputan::where('penjemputan_id', $pj->id)->get();
             if (!empty($d_pj)) {
