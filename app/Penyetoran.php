@@ -19,12 +19,12 @@ class Penyetoran extends Model
 
     public function nasabah()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\User', 'id', 'nasabah_id');
     }
 
     public function pengurus_satu()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\User', 'id', 'pengurus1_id');
     }
 
     public function detail_penyetoran()
@@ -35,5 +35,10 @@ class Penyetoran extends Model
     public function transaksi()
     {
         return $this->hasOne('App\Transaksi');
+    }
+
+    public function penjemputan()
+    {
+        return $this->hasOne('App\Penjemputan', 'id', 'penjemputan_id');
     }
 }
