@@ -22,4 +22,9 @@ class TabunganUser extends Model
     {
         return $this->hasMany('App\Transaksi');
     }
+
+    public function nasabah()
+    {
+        return $this->hasMany('App\User', 'id', 'nasabah_id');
+    }
 }

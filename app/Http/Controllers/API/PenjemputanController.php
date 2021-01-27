@@ -89,7 +89,7 @@ class PenjemputanController extends Controller
 
         $d_pj = $d_pj->firstWhere('id', $id);
 
-        if (empty($d_pj) || $pj->firstWhere('id', $d_pj->penjemputan_id)->status != 'menunggu') {
+        if (empty($d_pj) || $pj->firstWhere('id', $d_pj->penjemputan_id)->status != 'Menunggu') {
             return $this->sendResponse('failed', 'Pickup data not found or cannot be deleted', null, 400);
         }
 

@@ -35,6 +35,8 @@ Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(func
     Route::post('request', 'PenjemputanController@requestPenjemputan'); // request epnjemputan sampah nya ke pengurus satu
     Route::delete('request/cancel/{penjemputan_id}', 'PenjemputanController@batalkanRequestPenjemputan'); // cancel penjemputan
     Route::delete('request/cancel-item/{detail_penjemputan_id}', 'PenjemputanController@batalkanBarangRequestPenjemputan'); // cancel sampah penjemputannya
+
+    Route::get('tabungan', 'NasabahController@getTabungan');
 });
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function () {
