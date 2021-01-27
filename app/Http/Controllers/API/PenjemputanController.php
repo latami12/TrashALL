@@ -52,7 +52,7 @@ class PenjemputanController extends Controller
         $old_pj = $pj->firstOrCreate([
             'tanggal'       => Carbon::now()->toDateString(),
             'nasabah_id'    => Auth::id(),
-            'status'        => 'menunggu',
+            'status'        => 'Menunggu',
             'lokasi'        => $lokasi,
             'image'         => $image
         ]);
