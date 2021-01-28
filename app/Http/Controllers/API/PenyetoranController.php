@@ -22,26 +22,26 @@ class PenyetoranController extends Controller
 {
     public function showNasabahRequest()
     {
-        $pj = Penjemputan::where('status', 'menunggu')
+        $pj = Penjemputan::where('status', 'Menunggu')
             ->with(['nasabah', 'detail_penjemputan'])
             ->get();
 
-        return $this->sendResponse('succes', 'Request data has been succesfully get', $pj, 200);
+        return $this->sendResponse('Success', 'Request data has been succesfully get', $pj, 200);
     }
 
     public function showAcceptedRequest()
     {
-        $pj = Penjemputan::where('status', 'diterima')
+        $pj = Penjemputan::where('status', 'Diterima')
             ->where('pengurus1_id', Auth::id())
             ->with(['nasabah', 'detail_penjemputan'])
             ->get();
 
-        return $this->sendResponse('succes', 'Request data has been succesfully get', $pj, 200);
+        return $this->sendResponse('Success', 'Request data has been succesfully get', $pj, 200);
     }
 
     public function acceptNasabahRequest($pj_id)
     {
-        $pj = Penjemputan::where('status', 'menunggu')
+        $pj = Penjemputan::where('status', 'Menunggu')
             ->findOrFail($pj_id);
 
         $data = $pj->load('nasabah');
@@ -51,14 +51,14 @@ class PenyetoranController extends Controller
             'pengurus1_id' => Auth::id()
         ]);
 
-        return $this->sendResponse('succes', 'Request data has been succesfully get', $data, 200);
+        return $this->sendResponse('Success', 'Request data has been succesfully get', $data, 200);
     }
 
     public function declineNasabahRequest($pj_id)
     {
-        $pj = Penjemputan::findOrFail($pj_id)->update(['status' => 'ditolak']);
+        $pj = Penjemputan::findOrFail($pj_id)->update(['status' => 'Ditolak']);
 
-        return $this->sendResponse('succes', 'Request data succesfully decline', $pj, 200);
+        return $this->sendResponse('Success', 'Request data succesfully decline', $pj, 200);
     }
 
     public function searchNasabah($keyword = null)
@@ -78,7 +78,7 @@ class PenyetoranController extends Controller
             return $user->whoHasRole('nasabah');
         })->get();
 
-        return $this->sendResponse('succes', 'Users data has been succesfully get', $users, 200);
+        return $this->sendResponse('Success', 'Users data has been succesfully get', $users, 200);
     }
 
 
@@ -133,12 +133,12 @@ class PenyetoranController extends Controller
             $data = $pt->firstWhere('id', $pt->id)->load('detail_penyetoran');
 
 
-            return $this->sendResponse('succes', 'Request data has been succesfully get', $data, 200);
+            return $this->sendResponse('Success', 'Request data has been succesfully get', $data, 200);
         } catch (\Throwable $e) {
             report($e);
             DB::rollback();
 
-            return $this->sendResponse('failed', 'Request data failed to create', null, 500);
+            return $this->sendResponse('Failed', 'Request data failed to create', null, 500);
         }
     }
 
@@ -149,7 +149,7 @@ class PenyetoranController extends Controller
             ->with('detail_penyetoran')
             ->get();
 
-        return $this->sendResponse('succes', 'Deposit data has been succesfully get', $data, 200);
+        return $this->sendResponse('Success', 'Deposit data has been succesfully get', $data, 200);
     }
 
     public function confirmDepositAsTransaksi($penyetoran_id, $auto_confirm = false)
@@ -159,7 +159,7 @@ class PenyetoranController extends Controller
             ->first();
 
         if (empty($pt)) {
-            return $this->sendResponse('failed', 'Deposit data not found or has been confirmed', null, 400);
+            return $this->sendResponse('Failed', 'Deposit data not found or has been confirmed', null, 400);
         }
 
         $data = DB::transaction(function () use ($pt) {
@@ -230,9 +230,9 @@ class PenyetoranController extends Controller
 
         if ($auto_confirm != true) {
             try {
-                return $this->sendResponse('succes', 'Deposit data has been succesfully confirmed', $data, 200);
+                return $this->sendResponse('Success', 'Deposit data has been succesfully confirmed', $data, 200);
             } catch (\Throwable $e) {
-                return $this->sendResponse('failed', 'Deposit data failed to confirm', null, 500);
+                return $this->sendResponse('Failed', 'Deposit data failed to confirm', null, 500);
             }
         }
     }

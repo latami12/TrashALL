@@ -3,17 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -36,7 +25,7 @@ Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(func
     Route::delete('request/cancel/{penjemputan_id}', 'PenjemputanController@batalkanRequestPenjemputan'); // cancel penjemputan
     Route::delete('request/cancel-item/{detail_penjemputan_id}', 'PenjemputanController@batalkanBarangRequestPenjemputan'); // cancel sampah penjemputannya
 
-    Route::get('tabungan', 'NasabahController@getTabungan');
+    Route::get('tabungan', 'API\NasabahController@getTabungan');
 });
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function () {
