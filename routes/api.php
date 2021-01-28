@@ -30,8 +30,8 @@ Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(func
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function () {
     Route::get('/show-request', 'PenyetoranController@showNasabahRequest'); // tampilkan request dari nasabah
-    Route::get('/show-accepted-request', 'PenyetoranController@showAcceptedRequest'); // tampilkan 
-    Route::get('/accept-request/{penjemputan_id}', 'PenyetoranController@acceptNasabahRequest'); // 
+    Route::get('/show-accepted-request', 'PenyetoranController@showAcceptedRequest'); // tampilkan
+    Route::get('/accept-request/{penjemputan_id}', 'PenyetoranController@acceptNasabahRequest'); //
     Route::get('/decline-request/{penjemputan_id}', 'PenyetoranController@declineNasabahRequest');
     Route::get('/search-nasabah/{keyword?}', 'PenyetoranController@searchNasabah'); // Optional Parameter
     Route::post('/store', 'PenyetoranController@penyetoranNasabah');
