@@ -47,7 +47,7 @@ class PenyetoranController extends Controller
         $data = $pj->load('nasabah');
 
         $pj->update([
-            'status'       => 'diterima',
+            'status'       => 'Diterima',
             'pengurus1_id' => Auth::id()
         ]);
 
