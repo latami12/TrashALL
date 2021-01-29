@@ -30,13 +30,14 @@ Route::prefix('nasabah')->namespace('API')->middleware('jwt.verify')->group(func
 
 Route::prefix('pengurus-satu')->namespace('API')->middleware('jwt.verify')->group(function () {
     Route::get('/show-request', 'PenyetoranController@showNasabahRequest'); // tampilkan request dari nasabah
-    Route::get('/show-accepted-request', 'PenyetoranController@showAcceptedRequest'); // tampilkan
-    Route::get('/accept-request/{penjemputan_id}', 'PenyetoranController@acceptNasabahRequest'); //
+    Route::get('/accept-request/{penjemputan_id}', 'PenyetoranController@acceptNasabahRequest'); // nerima penjemputan
+    Route::get('/show-accepted-request', 'PenyetoranController@showAcceptedRequest'); // menampilakn request penjemputan yang diterima pengurus satu
     Route::get('/decline-request/{penjemputan_id}', 'PenyetoranController@declineNasabahRequest');
-    Route::get('/search-nasabah/{keyword?}', 'PenyetoranController@searchNasabah'); // Optional Parameter
-    Route::post('/store', 'PenyetoranController@penyetoranNasabah');
-    Route::get('/show-deposit', 'PenyetoranController@showPenyetoranNasabah');
-    Route::get('/confirm-deposit/{penyetoran_id}', 'PenyetoranController@confirmDepositAsTransaksi');
+    // nolak penjemputan
+    Route::get('/search-nasabah/{keyword?}', 'PenyetoranController@searchNasabah'); // Optional Parameter (cari nasabah mau lewat nama, telpon, email bisa)
+    Route::post('/store', 'PenyetoranController@penyetoranNasabah'); // input sampah
+    Route::get('/show-deposit', 'PenyetoranController@showPenyetoranNasabah'); // nampilkan penyetoran yang beli dikonfirmasi
+    Route::get('/confirm-deposit/{penyetoran_id}', 'PenyetoranController@confirmDepositAsTransaksi'); // konfirmsai
 });
 
 Route::prefix('pengurus-dua')->namespace('API')->middleware('jwt.verify')->group(function () {

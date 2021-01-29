@@ -66,16 +66,14 @@ class PenyetoranController extends Controller
         $user = new User;
 
         $users = $user->when(!empty($keyword), function ($q) use ($keyword) {
-            $q->whereHas('roles', function ($q) {
-                $q->where('name', 'nasabah');
-            })
+            $q->where('role_id', 1)
                 ->where(function ($q) use ($keyword) {
                     return $q->where('name', 'like', "%{$keyword}%")
                         ->orWhere('email', "{$keyword}")
-                        ->orWhere('no_telephone', "{$keyword}");
+                        ->orWhere('phone', "{$keyword}");
                 });
         }, function () use ($user) {
-            return $user->whoHasRole('nasabah');
+            return $user->where('role_id', 1);
         })->get();
 
         return $this->sendResponse('Success', 'Users data has been succesfully get', $users, 200);
@@ -108,7 +106,7 @@ class PenyetoranController extends Controller
                     ],
                     [
                         'berat'         => $sampah['berat'],
-                        'harga'         => $request->keterangan_penyetoran == 'dijemput'
+                        'harga'           => $request->keterangan_penyetoran == 'dijemput'
                             ? $harga_jemput
                             : $harga_perkilogram,
                         'debit_nasabah' => $request->keterangan_penyetoran == 'dijemput'
