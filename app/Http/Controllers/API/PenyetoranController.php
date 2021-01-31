@@ -82,6 +82,27 @@ class PenyetoranController extends Controller
 
     public function penyetoranNasabah(Request $request)
     {
+        $request->validate([
+            'auto_confirm'          => ['sometimes'],
+            'nasabah_id'            => [
+                                        'required',
+                                        'user_role:role,nasabah'
+                                       ],
+            'keterangan_penyetoran' => ['required', Rule::in(['dijemput', 'diantar'])],
+            'penjemputan_id'        => [
+                                        'required_if:keterangan_penyetoran,dijemput',
+                                        Rule::exists('penjemputans', 'id')->where(function($query) use ($request) {
+                                            $query->where('nasabah_id', $request->nasabah_id)
+                                                    ->where('pengurus1_id', Auth::id())
+                                                    ->where('status', 'diterima');
+                                        }),
+                                       ],
+            'lokasi'                => ['required'],
+            'sampah'                => ['required'],
+            'sampah.*.sampah_id'    => ['required_with:sampah.*.berat', 'exists:App\Sampah,id', 'distinct'],
+            'sampah.*.berat'        => ['required_with:sampah.*.sampah_id'],
+        ]);
+
         try {
 
             DB::beginTransaction();
@@ -97,23 +118,21 @@ class PenyetoranController extends Controller
             ]);
 
             $sampahs = $request->sampah;
-            foreach ($sampahs as $sampah) {
+            foreach($sampahs as $sampah) {
                 $harga_perkilogram = Sampah::firstWhere('id', $sampah['sampah_id'])->harga_perkilogram;
                 $harga_jemput = $harga_perkilogram + ($harga_perkilogram * 0.2);
-                $pt->detail_penyetoran()->updateOrCreate(
-                    [
-                        'sampah_id'     => $sampah['sampah_id'],
-                    ],
-                    [
-                        'berat'         => $sampah['berat'],
-                        'harga'           => $request->keterangan_penyetoran == 'dijemput'
-                            ? $harga_jemput
-                            : $harga_perkilogram,
-                        'debit_nasabah' => $request->keterangan_penyetoran == 'dijemput'
-                            ? $harga_jemput * $sampah['berat']
-                            : $harga_perkilogram * $sampah['berat'],
-                    ]
-                );
+                $pt->detail_penyetoran()->updateOrCreate([
+                                                            'sampah_id'     => $sampah['sampah_id'],
+                                                         ],
+                                                         [
+                                                            'berat'         => $sampah['berat'],
+                                                            'harga'         => $request->keterangan_penyetoran == 'dijemput'
+                                                                                    ? $harga_jemput
+                                                                                    : $harga_perkilogram,
+                                                            'debit_nasabah' => $request->keterangan_penyetoran == 'dijemput'
+                                                                                    ? $harga_jemput * $sampah['berat']
+                                                                                    : $harga_perkilogram * $sampah['berat'],
+                                                         ]);
             }
 
             $d_pt = DetailPenyetoran::where('penyetoran_id', $pt->id)->get();
@@ -122,7 +141,7 @@ class PenyetoranController extends Controller
             $pt->total_debit = $d_pt->sum('debit_nasabah');
             $pt->update();
 
-            if ($request->auto_confirm == true) {
+            if( (bool) $request->auto_confirm == true ) {
                 $this->confirmDepositAsTransaksi($pt->id, $request->auto_confirm);
             }
 
@@ -131,12 +150,12 @@ class PenyetoranController extends Controller
             $data = $pt->firstWhere('id', $pt->id)->load('detail_penyetoran');
 
 
-            return $this->sendResponse('Success', 'Request data has been succesfully get', $data, 200);
-        } catch (\Throwable $e) {
+            return $this->sendResponse('succes', 'Request data has been succesfully get', $data, 200);
+        } catch(\Throwable $e) {
             report($e);
             DB::rollback();
 
-            return $this->sendResponse('Failed', 'Request data failed to create', null, 500);
+            return $this->sendResponse('failed', 'Request data failed to create', null, 500);
         }
     }
 

@@ -15,15 +15,18 @@ class SampahResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = new User;
+        $auth_user = User::firstWhere('id', Auth::id());
 
         return [
             'id' => $this->id,
             'golongan_sampah_id' => $this->golongan_sampah_id,
             'golongan_sampah' => $this->golonganSampah->golongan,
             'jenis_sampah' => $this->jenis_sampah,
-            'harga_perkilogram' => $this->when($user->where('role_id', 2), $this->harga_perkilogram),
-            'harga_jual_perkilogram' => $this->when($user->where('role_id', 3), $this->harga_jual_perkilogram),
+            'harga_perkilogram' => $this->when($auth_user->hasRole('pengurus-satu'), $this->harga_perkilogram),
+            $this->mergeWhen($auth_user->hasRole('pengurus-dua'), [
+                'jumlah_stock' => $this->gudang->total_berat,
+                'harga_jual_perkilogram' => $this->harga_jual_perkilogram,
+            ])
         ];
     }
 }
