@@ -32,6 +32,7 @@ Route::post('/create/users', 'PengurusController@create');
 Route::resource('/admin', 'ProfileWebController');
 
 Route::get('/get-sampah', 'SampahController@getSampah')->name('sampah');
+Route::delete('/delete-sampah', 'SampahController@delete')->name('sampah');
 Route::get('/get-saldo', 'SaldoController@getSaldo')->name('saldo');
 
 Route::get('bendahara', 'BendaharaController@index');
