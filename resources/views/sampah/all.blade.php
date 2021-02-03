@@ -28,13 +28,7 @@
                             <td>{{ $sampah->jenis_sampah}}</td>
                             <td>Rp.{{ $sampah->harga_perkilogram}}</td>
                             <td>Rp.{{ $sampah->harga_jual_perkilogram}}</td>
-                            <td><form action="" method="post" class="d-inline">
-                @csrf
-                @method('DELETE')
-                {{-- <a href="{{ route('profile.update', $user->id) }} " class="btn btn-warning btn-sm"><i
-                        class="fa fa-pencil"> | Edit</i></a> --}}
-                <!-- Button trigger modal -->
-                  <button class="btn btn-danger btn-sm"><i class="fa fa-trash"> | Hapus</i></button></td>
+                            
                         </tr>
                     @endforeach
             </tbody>
