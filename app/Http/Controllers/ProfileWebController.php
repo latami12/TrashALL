@@ -33,9 +33,6 @@ class ProfileWebController extends Controller
         }
 
         if ($request->foto) {
-            // $image = $request->image->getClientOriginalName() . '-' . time() . '.' . $request->image->extension();
-            // $request->image->move(public_path('img'), $image);   
-            // dd($request->foto);
             $img = base64_encode(file_get_contents($request->foto));
             $client = new Client();
             $res = $client->request('POST', 'https://freeimage.host/api/1/upload', [

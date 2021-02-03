@@ -40,6 +40,18 @@
               <p>User Create</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('sampah')}}">
+              <i class="material-icons">Trash</i>
+              <p>Trash</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('sampah')}}">
+              <i class="material-icons">Money</i>
+              <p>Saldo</p>
+            </a>
+          </li>
           <!-- <li class="nav-item active-pro ">
                 <a class="nav-link" href="./upgrade.html">
                     <i class="material-icons">unarchive</i>
